@@ -16,7 +16,7 @@
 
 <body>
 	<h3>IPv4 Calculator</h3>
-	<h5>Enter an IPv4 address...</h5>
+	<h5>Enter an IPv4 address.  (xxx.xxx.xxx.xxx/xx)</h5>
 	<form class="form-container">
 		<div class="form-group">
 			<label>IPv4 Address:  </label>
@@ -24,10 +24,11 @@
 		</div>
 	</form>
 	<table class="table table-bordered table-hover">
-		<tr>
-			<td>Subnet Mask:  </td>
-			<td>123.123.123.123</td>
-		</tr>
+		<tr><td>Subnet Mask:  </td><td id="subnetmask"></td></tr>
+		<tr><td>Subnet Bits:  </td><td id="subnetbits"></td></tr>
+		<tr><td>Maximum Number of Subnets:  </td><td id="maxsubnets"></td></tr>
+		<tr><td>Hosts Per Subnet:  </td><td id="hostspersubnet"></td></tr>
+		<tr><td>IP Address Class:  </td><td id="ipclass"></td></tr>
 	</table>
 
 
@@ -36,16 +37,145 @@
 
     <!-- Bootstrap Core JavaScript -->
     <!-- <script src="js/bootstrap.min.js"></script> -->
-	
+
 	<script>
 	$(document).ready(function(){
 
+    $("#idinput").empty();
+
 		var noSubnet = new RegExp(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/);
-		var withSubnet = new RegExp(/((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}\/(?:\d|[12]\d|3[01])$/);
+		var withSubnet = new RegExp(/((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}\/(?:\d|[12]\d|3[02])$/);
 		$("#ipinput").on('input', function() {
+
+      //handle class field
+			var firstoctet = parseInt($("#ipinput").val().split(".")[0], 10);
+			if (firstoctet >= 0 && firstoctet <= 255){
+				if (firstoctet >= 240){
+					$("#ipclass").text("E")
+				};
+        if (firstoctet >= 224 && firstoctet <= 239){
+          $("#ipclass").text("D")
+        };
+        if (firstoctet >= 192 && firstoctet <= 223){
+          $("#ipclass").text("C")
+        };
+        if (firstoctet >= 128 && firstoctet <= 191){
+          $("#ipclass").text("B")
+        };
+        if (firstoctet >= 0 && firstoctet <= 127){
+          $("#ipclass").text("A")
+        };
+			};
+
+      //check if match with subnet notation
 			if(withSubnet.test($("#ipinput").val())){
-				console.log("match!");
+        var cidr = parseInt($("#ipinput").val().split("/")[1], 10);
+        var remainingbits = (32 - cidr);
+        var maxsubnets = (Math.pow(2, remainingbits) - 2);
+        $("#subnetbits").text(cidr);
+        $("#maxsubnets").text(maxsubnets)
 				$("body").append('regex match!!');
+
+        //calculations based on cidr
+        if (cidr == "32"){
+          $("#subnetmask").text("255.255.255.255")
+        };
+        if (cidr == "31"){
+          $("#subnetmask").text("255.255.255.254")
+        };
+        if (cidr == "30"){
+          $("#subnetmask").text("255.255.255.252")
+        };
+        if (cidr == "29"){
+          $("#subnetmask").text("255.255.255.248")
+        };
+        if (cidr == "28"){
+          $("#subnetmask").text("255.255.255.240")
+        };
+        if (cidr == "27"){
+          $("#subnetmask").text("255.255.255.224")
+        };
+        if (cidr == "26"){
+          $("#subnetmask").text("255.255.255.192")
+        };
+        if (cidr == "25"){
+          $("#subnetmask").text("255.255.255.128")
+        };
+        if (cidr == "24"){
+          $("#subnetmask").text("255.255.255.0")
+        };
+        if (cidr == "23"){
+          $("#subnetmask").text("255.255.254.0")
+        };
+        if (cidr == "22"){
+          $("#subnetmask").text("255.255.252.0")
+        };
+        if (cidr == "21"){
+          $("#subnetmask").text("255.255.248.0")
+        };
+        if (cidr == "20"){
+          $("#subnetmask").text("255.255.240.0")
+        };
+        if (cidr == "19"){
+          $("#subnetmask").text("255.255.224.0")
+        };
+        if (cidr == "18"){
+          $("#subnetmask").text("255.255.192.0")
+        };
+        if (cidr == "17"){
+          $("#subnetmask").text("255.255.128.0")
+        };
+        if (cidr == "16"){
+          $("#subnetmask").text("255.255.0.0")
+        };
+        if (cidr == "15"){
+          $("#subnetmask").text("255.254.0.0")
+        };
+        if (cidr == "14"){
+          $("#subnetmask").text("255.252.0.0")
+        };
+        if (cidr == "13"){
+          $("#subnetmask").text("255.248.0.0")
+        };
+        if (cidr == "12"){
+          $("#subnetmask").text("255.240.0.0")
+        };
+        if (cidr == "11"){
+          $("#subnetmask").text("255.224.0.0")
+        };
+        if (cidr == "10"){
+          $("#subnetmask").text("255.192.0.0")
+        };
+        if (cidr == "9"){
+          $("#subnetmask").text("255.128.0.0")
+        };
+        if (cidr == "8"){
+          $("#subnetmask").text("255.0.0.0")
+        };
+        if (cidr == "7"){
+          $("#subnetmask").text("254.0.0.0")
+        };
+        if (cidr == "6"){
+          $("#subnetmask").text("252.0.0.0")
+        };
+        if (cidr == "5"){
+          $("#subnetmask").text("248.0.0.0")
+        };
+        if (cidr == "4"){
+          $("#subnetmask").text("240.0.0.0")
+        };
+        if (cidr == "3"){
+          $("#subnetmask").text("224.0.0.0")
+        };
+        if (cidr == "2"){
+          $("#subnetmask").text("192.0.0.0")
+        };
+        if (cidr == "1"){
+          $("#subnetmask").text("128.0.0.0")
+        };
+        if (cidr == "0"){
+          $("#subnetmask").text("0.0.0.0")
+        };
 			}
 			else{
 				console.log("no match");
