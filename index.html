@@ -26,8 +26,8 @@
 	<table class="table table-bordered table-hover">
 		<tr><td>Subnet Mask:  </td><td id="subnetmask"></td></tr>
 		<tr><td>Subnet Bits:  </td><td id="subnetbits"></td></tr>
-		<tr><td>Maximum Number of Subnets:  </td><td id="maxsubnets"></td></tr>
-		<tr><td>Hosts Per Subnet:  </td><td id="hostspersubnet"></td></tr>
+		<tr><td>Addresses Per Subnet:  </td><td id="addpersubnet"></td></tr>
+		<tr><td>Hosts Per Subnet:  </td><td id="hostpersubnet"></td></tr>
 		<tr><td>IP Address Class:  </td><td id="ipclass"></td></tr>
 	</table>
 
@@ -44,7 +44,7 @@
     $("#idinput").empty();
 
 		var noSubnet = new RegExp(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/);
-		var withSubnet = new RegExp(/((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}\/(?:\d|[12]\d|3[02])$/);
+		var withSubnet = new RegExp(/((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}\/(?:\d|[12]\d|3[01])$/);
 		$("#ipinput").on('input', function() {
 
       //handle class field
@@ -71,10 +71,11 @@
 			if(withSubnet.test($("#ipinput").val())){
         var cidr = parseInt($("#ipinput").val().split("/")[1], 10);
         var remainingbits = (32 - cidr);
-        var maxsubnets = (Math.pow(2, remainingbits) - 2);
+        var addresscount = (Math.pow(2, remainingbits));
         $("#subnetbits").text(cidr);
-        $("#maxsubnets").text(maxsubnets)
-				$("body").append('regex match!!');
+        $("#addpersubnet").text(addresscount);
+		$("#hostpersubnet").text(addresscount - 2);
+
 
         //calculations based on cidr
         if (cidr == "32"){
