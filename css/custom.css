@@ -1,4 +1,18 @@
 * {
-	font-family:  sans;
+	font-family:  verdana, sans-serif;
 	margin-left: 5px
+}
+
+table {
+	table-layout: fixed;
+}
+
+.table tr td {
+	text-align:  right;
+	width:  100px;
+}
+
+.tablelabel {
+	color: grey;
+	padding-right: 15px;
 }
