@@ -23,7 +23,6 @@
 		<tr><td class="tablelabel">Subnet Mask:  </td><td id="subnetmask"></td></tr>
 		<tr><td class="tablelabel">Subnet Bits:  </td><td id="subnetbits"></td></tr>
     <tr><td class="tablelabel">Hosts:  </td><td id="hosts"></td></tr>
-	</table>
 
 
     <!-- jQuery -->
@@ -38,13 +37,16 @@
     $("#idinput").empty();
 
 		var noSubnet = new RegExp(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/);
+
 		var withSubnet = new RegExp(/((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}\/(?:\d|[12]\d|3[012])$/);
+
 		$("#ipinput").on('input', function() {
 
 
       //check if match with subnet notation
 			if(withSubnet.test($("#ipinput").val())){
         var cidr = parseInt($("#ipinput").val().split("/")[1], 10);
+
         $("#subnetbits").text(cidr);
 
         //calculations based on cidr
